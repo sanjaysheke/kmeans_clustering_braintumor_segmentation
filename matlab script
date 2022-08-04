@@ -1,0 +1,83 @@
+% Author : Sanjay M Shelke
+% Title: K means Clustering Matlab
+S. M. Shelke and S. W. Mohod, "Automated Segmentation and Detection of Brain Tumor from MRI," 2018 International Conference on Advances in Computing, Communications and Informatics (ICACCI), 2018, pp. 2120-2126, doi: 10.1109/ICACCI.2018.8554807.
+
+
+imgd=Data.imgDATA(:,:,7);
+imgv = imgd(:);
+copy_img = imgd;
+[R,C,O] = size(imgd);
+mu = [20 30 50];
+ass1 = zeros(R,C);
+ass2 = zeros(R,C);
+ass3 = zeros(R,C);
+while(true)
+oldmu = mu;
+for i =1: R
+for j = 1:C
+r = imgd(i,j);
+ab = abs((imgd(i,j))-mu);
+mn = find(ab==min(ab));
+if mn(1) == 1
+ass1(i,j) = r;
+end
+if mn(1) == 2
+ass2(i,j) = r;
+end
+if mn(1)==3
+ass3(i,j)=r;
+end
+end
+end
+co1 = ass1(:);
+su1 = sum(co1);
+fi1 = find(co1);
+len1 = length(fi1);
+mm1 = su1/len1;
+mm11 = round(mm1);
+co2 = ass2(:);
+su2 = sum(co2);
+fi2 = find(co2);
+len2 = length(fi2);
+mm2 = su2/len2;
+mm22 = round(mm2);
+co3 = ass3(:);
+su3 = sum(co3);
+fi3 = find(co3);
+len3 = length(fi3);
+mm3 = su3/len3;
+mm33 = round(mm3);
+mu = [mm11 mm22 mm33];
+if(mu == oldmu) 
+break;
+end
+end
+for i = 1:R
+for j = 1:C
+if ass1(i,j)>0
+ass1(i,j) = 1;
+end
+if ass2(i,j)>0
+ass2(i,j) = 2;
+end
+if ass3(i,j)>0
+ass3(i,j) = 3;
+end
+end
+end
+finlcluste = (ass1+ass2+ass3);
+finlcluste1 = label2rgb(finlcluste);
+ff = rgb2gray(finlcluste1);
+fff = im2bw(ff);
+imshow(img);
+figure;
+title('original image');
+imshow(finlcluste1);
+figure;
+title('clustered image');
+%ff=imresize(ff, [192 192]);
+imshow(ff);
+figure;
+title('clustered image in gray');
+%fff=imresize(fff, [192 192]);
+imshow(fff);
